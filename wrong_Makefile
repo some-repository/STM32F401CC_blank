@@ -1,0 +1,94 @@
+BIN_DIR := ./bin
+CORE := ./core
+SRC := ./src
+INC=-I./lib/core
+
+default:
+	mkdir -p bin
+
+# startup
+	arm-none-eabi-as -Wan -mthumb -mcpu=cortex-m4 -o $(BIN_DIR)/startup.o $(CORE)/startup_stm32f401xc.s
+
+# syscalls
+#	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/syscalls.c -o $(BIN_DIR)/syscalls.o
+
+# system
+	arm-none-eabi-gcc -O0 -nodefaultlibs -nostdlib -nostartfiles -ffreestanding -Wall -Wextra --pedantic -mthumb -mcpu=cortex-m4 $(INC) -c $(LIBS)/core/system_stm32f1xx.c -o $(BIN_DIR)/system_stm32f1xx.o
+
+# main
+	arm-none-eabi-gcc -O0 -nodefaultlibs -nostdlib -nostartfiles -ffreestanding -Wall -Wextra --pedantic -mthumb -mcpu=cortex-m4 $(INC) -c $(SRC)/main.c -o $(BIN_DIR)/main.o
+
+# link objects
+	arm-none-eabi-gcc -mthumb -mcpu=cortex-m4 -o $(BIN_DIR)/main.elf -T$(LIBS)/STM32F103XB_FLASH.ld -Wl,-Map,$(BIN_DIR)/main.map $(BIN_DIR)/main.o $(BIN_DIR)/startup.o $(BIN_DIR)/syscalls.o $(BIN_DIR)/system_stm32f1xx.o $(LDFLAGS)
+
+# build firmware
+	arm-none-eabi-objcopy ./bin/main.elf $(BIN_DIR)/main.bin -O binary
+
+flash:
+	st-flash write $(BIN_DIR)/main.bin 0x08000000
+
+clean:
+	rm -f $(BIN_DIR)/*
+
+# syscalls
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/syscalls.c -o $(BIN_DIR)/syscalls.o
+
+# system
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/system_stm32f1xx.c -o $(BIN_DIR)/system_stm32f1xx.o
+
+# main
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(SRC)/main.c -o $(BIN_DIR)/main.o
+
+# link objects
+	arm-none-eabi-gcc -mthumb -mcpu=cortex-m3 -o $(BIN_DIR)/main.elf -T$(LIBS)/STM32F103XB_FLASH.ld -Wl,-Map,$(BIN_DIR)/main.map $(BIN_DIR)/main.o $(BIN_DIR)/startup.o $(BIN_DIR)/syscalls.o $(BIN_DIR)/system_stm32f1xx.o $(LDFLAGS)
+
+# build firmware
+	arm-none-eabi-objcopy ./bin/main.elf $(BIN_DIR)/main.bin -O binary
+
+flash:
+	st-flash write $(BIN_DIR)/main.bin 0x08000000
+
+clean:
+	rm -f $(BIN_DIR)/*
+
+# syscalls
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/syscalls.c -o $(BIN_DIR)/syscalls.o
+
+# system
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/system_stm32f1xx.c -o $(BIN_DIR)/system_stm32f1xx.o
+
+# main
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(SRC)/main.c -o $(BIN_DIR)/main.o
+
+# link objects
+	arm-none-eabi-gcc -mthumb -mcpu=cortex-m3 -o $(BIN_DIR)/main.elf -T$(LIBS)/STM32F103XB_FLASH.ld -Wl,-Map,$(BIN_DIR)/main.map $(BIN_DIR)/main.o $(BIN_DIR)/startup.o $(BIN_DIR)/syscalls.o $(BIN_DIR)/system_stm32f1xx.o $(LDFLAGS)
+
+# build firmware
+	arm-none-eabi-objcopy ./bin/main.elf $(BIN_DIR)/main.bin -O binary
+
+flash:
+	st-flash write $(BIN_DIR)/main.bin 0x08000000
+
+clean:
+	rm -f $(BIN_DIR)/*
+
+# syscalls
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/syscalls.c -o $(BIN_DIR)/syscalls.o
+
+# system
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(LIBS)/core/system_stm32f1xx.c -o $(BIN_DIR)/system_stm32f1xx.o
+
+# main
+	arm-none-eabi-gcc -O0 -nostdlib -nostartfiles -ffreestanding -Wall -mthumb -mcpu=cortex-m3 $(INC) -c $(SRC)/main.c -o $(BIN_DIR)/main.o
+
+# link objects
+	arm-none-eabi-gcc -mthumb -mcpu=cortex-m3 -o $(BIN_DIR)/main.elf -T$(LIBS)/STM32F103XB_FLASH.ld -Wl,-Map,$(BIN_DIR)/main.map $(BIN_DIR)/main.o $(BIN_DIR)/startup.o $(BIN_DIR)/syscalls.o $(BIN_DIR)/system_stm32f1xx.o $(LDFLAGS)
+
+# build firmware
+	arm-none-eabi-objcopy ./bin/main.elf $(BIN_DIR)/main.bin -O binary
+
+flash:
+	st-flash write $(BIN_DIR)/main.bin 0x08000000
+
+clean:
+	rm -f $(BIN_DIR)/*
