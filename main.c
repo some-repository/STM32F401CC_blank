@@ -1,7 +1,10 @@
+#include <stm32f401xc.h>
 #include <stm32f4xx_ll_rcc.h>
 #include <stm32f4xx_ll_system.h>
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_gpio.h>
+//#include <stm32f4xx.h>
+
 
 
 /*
@@ -18,15 +21,11 @@ static void gpio_config(void)
  * (basically it is a simple cycle with a predefined number
  * of loops)
  */
-__attribute__((naked)) static void delay (void)
+void delay (void)
 {
-    asm ("push {r7, lr}");
-    asm ("ldr r6, [pc, #8]");
-    asm ("sub r6, #1");
-    asm ("cmp r6, #0");
-    asm ("bne delay_10ms+0x4");
-    asm ("pop {r7, pc}");
-    asm (".word 0x5b8d80"); //
+    int i = 0;
+    for (i = 0; i < 1000000; i++);
+    i = 0;
 }
 
 int main(void)
