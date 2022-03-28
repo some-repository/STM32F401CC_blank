@@ -2,9 +2,9 @@
 *****************************************************************************
 **
 
-**  File        : stm32_flash.ld
+**  File        : LinkerScript.ld
 **
-**  Abstract    : Linker script for STM32F401VC Device with
+**  Abstract    : Linker script for STM32F401VCTx Device with
 **                256KByte FLASH, 64KByte RAM
 **
 **                Set heap size, stack size and stack location according
@@ -14,19 +14,19 @@
 **
 **  Target      : STMicroelectronics STM32
 **
-**  Environment : Atollic TrueSTUDIO(R)
 **
-*******************************************************************************
-** @attention
+**  Distribution: The file is distributed as is, without any warranty
+**                of any kind.
 **
-** Copyright (c) STMicroelectronics.
-** All rights reserved.
+**  (c)Copyright Ac6.
+**  You may use this file as-is or modify it according to the needs of your
+**  project. Distribution of this file (unmodified or modified) is not
+**  permitted. Ac6 permit registered System Workbench for MCU users the
+**  rights to distribute the assembled, compiled & linked contents of this
+**  file as part of an application binary file, provided that it is built
+**  using the System Workbench for MCU toolchain.
 **
-** This software is licensed under terms that can be found in the LICENSE file
-** in the root directory of this software component.
-** If no LICENSE file comes with this software, it is provided AS-IS.
-**
-*******************************************************************************
+*****************************************************************************
 */
 
 /* Entry Point */
@@ -130,7 +130,7 @@ SECTIONS
   . = ALIGN(4);
   .bss :
   {
-    /* This is used by the startup in order to initialize the .bss secion */
+    /* This is used by the startup in order to initialize the .bss section */
     _sbss = .;         /* define a global symbol at bss start */
     __bss_start__ = _sbss;
     *(.bss)
@@ -145,12 +145,12 @@ SECTIONS
   /* User_heap_stack section, used to check that there is enough RAM left */
   ._user_heap_stack :
   {
-    . = ALIGN(4);
+    . = ALIGN(8);
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
-    . = ALIGN(4);
+    . = ALIGN(8);
   } >RAM
 
   
