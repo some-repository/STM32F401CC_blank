@@ -1,7 +1,4 @@
-#define USB_OTG_FS
-#define USB_OTG_HS
-#define USE_FULL_LL_DRIVER
-#define RCC
+#define MCO
 
 #include "stm32f401xc.h"
 #include "stm32f4xx_ll_rcc.h"
@@ -14,8 +11,8 @@
  */
 void GPIO_config(void)
 {
-    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOC);
-    LL_GPIO_SetPinMode(GPIOC, LL_GPIO_PIN_13, LL_GPIO_MODE_OUTPUT);
+    LL_AHB1_GRP1_EnableClock (LL_AHB1_GRP1_PERIPH_GPIOC);
+    LL_GPIO_SetPinMode (GPIOC, LL_GPIO_PIN_13, LL_GPIO_MODE_OUTPUT);
 }
 
 static void delay (void)
@@ -25,9 +22,23 @@ static void delay (void)
     i = 0;
 }
 
+void MCO_config (void) //SYSCLK/2 on PA8
+{
+    LL_AHB1_GRP1_EnableClock (LL_AHB1_GRP1_PERIPH_GPIOA);
+    LL_GPIO_SetPinMode (GPIOA, LL_GPIO_PIN_8, LL_GPIO_MODE_ALTERNATE);
+    LL_GPIO_SetPinSpeed (GPIOA, LL_GPIO_PIN_8, LL_GPIO_SPEED_FREQ_VERY_HIGH);
+    LL_GPIO_SetAFPin_8_15 (GPIOA, LL_GPIO_PIN_8, LL_GPIO_AF_0);
+    LL_RCC_ConfigMCO (LL_RCC_MCO1SOURCE_PLLCLK, LL_RCC_MCO1_DIV_2); //only MCO1 is available on this MCU
+}
+
 void RCC_config (void)
 {
+    LL_RCC_DeInit ();
     LL_FLASH_SetLatency (LL_FLASH_LATENCY_2);
+    #if defined (MCO)
+        MCO_config ();
+    #endif //MCO
+
     /* Enable HSE and wait for activation*/
     LL_RCC_HSE_Enable ();
     while (LL_RCC_HSE_IsReady () != 1);
@@ -46,20 +57,10 @@ void RCC_config (void)
     while (LL_RCC_GetUSBClockFreq (LL_RCC_USB_CLKSOURCE) == LL_RCC_PERIPH_FREQUENCY_NO);
 }
 
-void MCO_config (void) //SYSCLK/2 on PA8
-{
-    LL_AHB2_GRP1_EnableClock (LL_AHB1_GRP1_PERIPH_GPIOA);
-    LL_GPIO_SetPinMode (GPIOA, LL_GPIO_PIN_8, LL_GPIO_MODE_ALTERNATE);
-    LL_GPIO_SetPinSpeed (GPIOA, LL_GPIO_PIN_8, LL_GPIO_SPEED_FREQ_VERY_HIGH);
-    LL_GPIO_SetAFPin_8_15 (GPIOA, LL_GPIO_PIN_8, LL_GPIO_AF_0);
-    LL_RCC_ConfigMCO (LL_RCC_MCO2SOURCE_SYSCLK, LL_RCC_MCO2_DIV_2);   
-}
-
 int main(void)
 {
     RCC_config ();
     GPIO_config ();
-    MCO_config ();
 
     while (1) 
     {

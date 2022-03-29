@@ -14,13 +14,6 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
   */
-
-//-------------------------  
-#define USB_OTG_FS
-#define USB_OTG_HS
-#define USE_FULL_LL_DRIVER
-#define RCC
-//------------------------- 
   
 #if defined(USE_FULL_LL_DRIVER)
 
